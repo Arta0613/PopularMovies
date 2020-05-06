@@ -12,8 +12,11 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.popularmovies.R;
 import com.example.popularmovies.databinding.ActivityHomeBinding;
+import com.example.popularmovies.domain.MovieItem;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements HomeItemClickListener {
+
+    private HomeViewModel homeViewModel;
 
     @Override
     protected void onCreate(final @Nullable Bundle savedInstanceState) {
@@ -21,10 +24,13 @@ public class HomeActivity extends AppCompatActivity {
         ActivityHomeBinding binding =
                 DataBindingUtil.setContentView(this, R.layout.activity_home);
 
-        HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding.setLifecycleOwner(this);
         binding.setViewModel(homeViewModel);
+        homeViewModel.setItemClickListener(this);
+
+        loadMovies();
     }
 
     @Override
@@ -40,5 +46,14 @@ public class HomeActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onItemClicked(final MovieItem movieItem) {
+        // TODO: detect null movie item (if couldn't load) and display
+    }
+
+    private void loadMovies() {
+        homeViewModel.loadMovies();
     }
 }

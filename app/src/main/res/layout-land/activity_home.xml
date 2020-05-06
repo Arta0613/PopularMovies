@@ -10,7 +10,6 @@
             type="com.example.popularmovies.ui.HomeViewModel" />
     </data>
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,7 +19,7 @@
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:setAdapter="@{viewModel.getAdapter()}"
-            app:spanCount="2" />
+            app:spanCount="4" />
 
         <include
             layout="@layout/loading_indicator"
@@ -33,10 +32,8 @@
             android:contentDescription="@string/network_error_image"
             android:onClick="@{() -> viewModel.retryLoadingMovies()}"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/try_again_portrait"
+            app:srcCompat="@drawable/try_again_land"
             app:visibleOrGone="@{viewModel.errorView}"
             tools:visibility="visible" />
-
     </FrameLayout>
-
 </layout>
