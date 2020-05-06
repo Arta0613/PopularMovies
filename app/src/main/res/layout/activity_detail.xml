@@ -20,6 +20,7 @@
             android:adjustViewBounds="true"
             android:contentDescription="@string/movie_poster_description"
             android:scaleType="fitXY"
+            app:errorDrawable="@{@drawable/error_background}"
             app:imageUrl="@{viewModel.movieItem.movieDetailImageUrl}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,6 +35,7 @@
             android:scaleType="fitXY"
             android:translationX="30dp"
             android:translationY="-125dp"
+            app:errorDrawable="@{@drawable/error_poster}"
             app:imageUrl="@{viewModel.movieItem.moviePosterUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/movieBackground" />
