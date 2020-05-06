@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.popularmovies.data.MovieApiUseCases;
 import com.example.popularmovies.domain.MovieItem;
+import com.example.popularmovies.domain.MovieSortOrder;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class HomeViewModel extends ViewModel {
     private final MovieApiUseCases movieApiUseCases = new MovieApiUseCases();
     private final MovieAdapter adapter = new MovieAdapter();
     private Disposable disposables = new CompositeDisposable();
+    private String moviePreference;
 
     public final MutableLiveData<Boolean> loadingIndicator = new MutableLiveData<>(false);
     public final MutableLiveData<Boolean> errorView = new MutableLiveData<>(false);
@@ -36,21 +38,25 @@ public class HomeViewModel extends ViewModel {
         return adapter;
     }
 
-    public void loadMovies() {
-        getPopularMovies();
+    public void loadMovies(final String preference) {
+        moviePreference = preference;
+
+        switch (MovieSortOrder.getMovieSortOrder(moviePreference)) {
+            case POPULAR:
+                getPopularMovies();
+                break;
+            case TOP_RATED:
+                getTopRatedMovies();
+                break;
+        }
     }
 
     public void retryLoadingMovies() {
-        getPopularMovies();
+        loadMovies(moviePreference);
     }
 
     public void setItemClickListener(final HomeItemClickListener homeItemClickListener) {
         adapter.setItemClickListener(homeItemClickListener);
-    }
-
-    private void setMoviesToAdapter(final List<MovieItem> movies) {
-        adapter.setMovies(movies);
-        adapter.notifyDataSetChanged();
     }
 
     private void getPopularMovies() {
@@ -80,6 +86,11 @@ public class HomeViewModel extends ViewModel {
                         Log.e(HomeViewModel.class.getSimpleName(), "Error occurred while loading data", e);
                     }
                 });
+    }
+
+    private void setMoviesToAdapter(final List<MovieItem> movies) {
+        adapter.setMovies(movies);
+        adapter.notifyDataSetChanged();
     }
 
     private void toggleLoadingView(final Boolean visibility) {
