@@ -86,11 +86,11 @@ public class HomeActivity extends AppCompatActivity implements HomeItemClickList
     private String getPreferenceTitle() {
         switch (MovieSortOrder.getMovieSortOrder(getMoviePreference())) {
             case POPULAR:
-                return getResources().getString(R.string.popular);
+                return getString(R.string.popular);
             case TOP_RATED:
-                return getResources().getString(R.string.top_rated);
+                return getString(R.string.top_rated);
             default:
-                return "Unknown";
+                return getString(R.string.unknown);
         }
     }
 

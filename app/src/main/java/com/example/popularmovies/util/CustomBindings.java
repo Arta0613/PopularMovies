@@ -1,5 +1,6 @@
 package com.example.popularmovies.util;
 
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -10,10 +11,14 @@ import com.bumptech.glide.Glide;
 
 public class CustomBindings {
 
-    @BindingAdapter("imageUrl")
-    public static void bindImageUrl(final ImageView imageView, final String imageUrl) {
-        // TODO: simple model of 'backdropPath' url can be empty; pass in object to determine how to load or different load options pre-loaded
-        Glide.with(imageView).load(imageUrl).into(imageView);
+    @BindingAdapter(value = {"errorDrawable", "imageUrl"})
+    public static void bindImageUrl(
+            final ImageView imageView,
+            final Drawable drawable,
+            final String imageUrl
+    ) {
+        // TODO: potentially null check / handle this earlier
+        Glide.with(imageView).load(imageUrl).error(drawable).into(imageView);
     }
 
     @BindingAdapter("setAdapter")
