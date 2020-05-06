@@ -1,5 +1,6 @@
 package com.example.popularmovies.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,6 +62,9 @@ public class HomeActivity extends AppCompatActivity implements HomeItemClickList
     @Override
     public void onItemClicked(final MovieItem movieItem) {
         // TODO: detect null movie item (if couldn't load) and display
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(MovieItem.MOVIE_KEY, movieItem.getMovie());
+        startActivity(intent);
     }
 
     private void loadMovies() {

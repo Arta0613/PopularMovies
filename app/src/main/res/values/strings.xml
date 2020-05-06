@@ -4,4 +4,7 @@
     <string name="top_rated">Top Rated</string>
     <string name="movie_poster_description">Poster image for a movie.</string>
     <string name="network_error_image">Network Error Image. Tap to Retry.</string>
+    <string name="release_date">Release Date:</string>
+    <string name="synopsis">Synopsis</string>
+    <string name="user_rating">User Rating:</string>
 </resources>
