@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.example.popularmovies.ui.HomeViewModel" />
+    </data>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:setAdapter="@{viewModel.getAdapter()}"
+            app:spanCount="2" />
+
+        <include
+            layout="@layout/loading_indicator"
+            app:visibleOrGone="@{viewModel.loadingIndicator}" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/network_error_image"
+            android:onClick="@{() -> viewModel.retryLoadingMovies()}"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/try_again_portrait"
+            app:visibleOrGone="@{viewModel.errorView}"
+            tools:visibility="visible" />
+
+    </FrameLayout>
+
+</layout>
