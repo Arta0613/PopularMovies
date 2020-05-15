@@ -2,7 +2,7 @@ package com.example.popularmovies.domain.movies;
 
 import androidx.annotation.NonNull;
 
-import com.example.popularmovies.data.MoviesApi;
+import com.example.popularmovies.data.movies.MoviesApi;
 
 public class MovieMapper {
 
