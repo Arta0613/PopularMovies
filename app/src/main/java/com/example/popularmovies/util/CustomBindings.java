@@ -17,7 +17,6 @@ public class CustomBindings {
             final Drawable drawable,
             final String imageUrl
     ) {
-        // TODO: potentially null check / handle this earlier
         Glide.with(imageView).load(imageUrl).error(drawable).into(imageView);
     }
 

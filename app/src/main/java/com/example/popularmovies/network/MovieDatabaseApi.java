@@ -2,6 +2,7 @@ package com.example.popularmovies.network;
 
 import androidx.annotation.NonNull;
 
+import com.example.popularmovies.data.moviereviews.MoviesReviewsApiResponse;
 import com.example.popularmovies.data.movies.MoviesApiResponse;
 import com.example.popularmovies.data.movietrailers.MoviesTrailersApiResponse;
 
@@ -19,4 +20,7 @@ public interface MovieDatabaseApi {
 
     @GET("movie/{id}/videos")
     Observable<MoviesTrailersApiResponse> getMovieTrailers(@NonNull final @Path("id") String movieId);
+
+    @GET("movie/{id}/reviews")
+    Observable<MoviesReviewsApiResponse> getMovieReviews(@NonNull final @Path("id") String movieId);
 }
