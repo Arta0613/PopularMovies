@@ -6,16 +6,23 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.popularmovies.R;
+import com.example.popularmovies.database.MovieEntityMappers;
+import com.example.popularmovies.database.PopularMoviesDatabase;
+import com.example.popularmovies.database.model.FavoriteMovie;
 import com.example.popularmovies.databinding.ActivityDetailBinding;
 import com.example.popularmovies.domain.movies.MovieItem;
+import com.example.popularmovies.util.AppExecutors;
+import com.example.popularmovies.util.NetworkState;
 
 import java.util.Objects;
 
@@ -40,13 +47,12 @@ public class DetailActivity extends AppCompatActivity implements ItemClickListen
 
         binding.setLifecycleOwner(this);
         binding.setViewModel(detailViewModel);
-
-        detailViewModel.loadData();
     }
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail, menu);
+        updateFavoriteStatus(menu.getItem(0));
         return true;
     }
 
@@ -55,7 +61,14 @@ public class DetailActivity extends AppCompatActivity implements ItemClickListen
         if (item.getItemId() == R.id.favorite) {
             final boolean isFavorite = !item.isChecked();
 
+            // when saving to database while offline; stopping attempt if not all is data loaded
+            if (isFavorite && noNetwork() && !detailViewModel.extraMovieDataLoaded()) {
+                Toast.makeText(this, R.string.try_saving_to_db_again, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
             setFavorite(item, isFavorite);
+            detailViewModel.updateFavoriteStatus(isFavorite);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -89,8 +102,43 @@ public class DetailActivity extends AppCompatActivity implements ItemClickListen
 
     private void setupViewModel() {
         detailViewModel = new ViewModelProvider(this).get(DetailViewModel.class);
-        detailViewModel.init(movieItem);
+        detailViewModel.init(PopularMoviesDatabase.getInstance(getApplicationContext()), movieItem);
         detailViewModel.setItemClickListener(this);
+    }
+
+    private void updateFavoriteStatus(@NonNull final MenuItem item) {
+        detailViewModel.getFavoriteLiveData().observe(this, new Observer<FavoriteMovie>() {
+            @Override
+            public void onChanged(final FavoriteMovie favoriteMovie) {
+                detailViewModel.getFavoriteLiveData().removeObserver(this);
+
+                final boolean isFavorite = favoriteMovie != null;
+                setFavorite(item, isFavorite);
+
+                if (noNetwork() && isFavorite) {
+                    loadOfflineData(favoriteMovie);
+                } else {
+                    detailViewModel.loadData();
+                }
+            }
+        });
+    }
+
+    private void loadOfflineData(@NonNull final FavoriteMovie favoriteMovie) {
+        AppExecutors.getInstance().getDiskIO().execute(() -> {
+            // We are offline & this is a favorite item (offline), set saved trailers/reviews to load in VM
+            detailViewModel.setMovieTrailerItems(
+                    MovieEntityMappers.mapMovieTrailerItems(favoriteMovie.getMovieTrailerEntities())
+            );
+            detailViewModel.setMovieReviewItems(
+                    MovieEntityMappers.mapMovieReviewItems(favoriteMovie.getMovieReviewEntities())
+            );
+
+            detailViewModel.setOfflineDataLoaded();
+
+            AppExecutors.getInstance().getMainThread().execute(() ->
+                    detailViewModel.updateMovieTrailersAndReviewsWithOfflineData());
+        });
     }
 
     private void setFavorite(@NonNull final MenuItem menuItem, final boolean isFavorite) {
@@ -98,5 +146,9 @@ public class DetailActivity extends AppCompatActivity implements ItemClickListen
         menuItem.setIcon(
                 isFavorite ? android.R.drawable.star_big_on : android.R.drawable.star_big_off
         );
+    }
+
+    private boolean noNetwork() {
+        return !NetworkState.isConnectedToNetwork(DetailActivity.this);
     }
 }
