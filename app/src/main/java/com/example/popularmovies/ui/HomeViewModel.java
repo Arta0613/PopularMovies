@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.popularmovies.data.MovieApiUseCases;
-import com.example.popularmovies.domain.MovieItem;
+import com.example.popularmovies.domain.movies.MovieItem;
 import com.example.popularmovies.domain.MovieSortOrder;
 
 import java.util.List;

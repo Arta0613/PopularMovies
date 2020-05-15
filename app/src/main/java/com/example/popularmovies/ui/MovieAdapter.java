@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.popularmovies.BR;
 import com.example.popularmovies.R;
-import com.example.popularmovies.domain.MovieItem;
+import com.example.popularmovies.domain.movies.MovieItem;
 
 import java.util.List;
 

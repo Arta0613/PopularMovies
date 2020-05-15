@@ -16,5 +16,5 @@ public class MoviesApiResponse {
     public int totalPages;
 
     @SerializedName("results")
-    public List<MovieApi> movies;
+    public List<MoviesApi> movies;
 }

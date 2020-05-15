@@ -1,7 +1,7 @@
 package com.example.popularmovies.data;
 
-import com.example.popularmovies.domain.MovieItem;
-import com.example.popularmovies.domain.MovieMapper;
+import com.example.popularmovies.domain.movies.MovieItem;
+import com.example.popularmovies.domain.movies.MovieMapper;
 import com.example.popularmovies.network.MovieDatabaseApi;
 import com.example.popularmovies.network.RetrofitServiceGenerator;
 

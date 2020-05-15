@@ -7,15 +7,7 @@
 
         <variable
             name="movieItem"
-            type="com.example.popularmovies.domain.MovieItem" />
-
-        <variable
-            name="image"
-            type="java.lang.String" />
-
-        <variable
-            name="intent"
-            type="android.content.Intent" />
+            type="com.example.popularmovies.domain.movies.MovieItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,7 +22,7 @@
             android:contentDescription="@string/movie_poster_description"
             android:scaleType="fitXY"
             app:errorDrawable="@{@drawable/error_poster}"
-            app:imageUrl="@{movieItem.getMoviePosterUrl()}"
+            app:imageUrl="@{movieItem.moviePosterFullUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/sample_image" />
