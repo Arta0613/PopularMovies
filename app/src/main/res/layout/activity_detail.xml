@@ -145,7 +145,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/trailers_separator"
                 tools:text="Trailers" />
 
-            <!-- TODO: Add view for if no trailers exist -->
+            <!-- TODO: Add view for if no trailers or reviews exist -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/trailers"
                 android:layout_width="match_parent"
@@ -163,10 +163,49 @@
                 android:layout_height="150dp"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/network_error_image"
-                android:onClick="@{() -> viewModel.retryLoadingExtras()}"
+                android:onClick="@{() -> viewModel.loadData()}"
                 android:scaleType="center"
                 android:translationY="-125dp"
                 app:layout_constraintTop_toBottomOf="@+id/trailers_label"
+                app:srcCompat="@drawable/try_again_portrait"
+                app:visibleOrGone="@{viewModel.errorView}"
+                tools:visibility="visible" />
+
+            <TextView
+                android:id="@+id/reviews_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/reviews"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:translationY="-125dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/trailers"
+                tools:text="Reviews" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/reviews"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_margin="16dp"
+                android:requiresFadingEdge="vertical"
+                android:scrollbars="vertical"
+                android:translationY="-125dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/reviews_label"
+                app:setAdapter="@{viewModel.getReviewAdapter()}" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/appCompatImageView"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/network_error_image"
+                android:onClick="@{() -> viewModel.loadData()}"
+                android:scaleType="center"
+                android:translationY="-125dp"
+                app:layout_constraintTop_toBottomOf="@+id/reviews_label"
                 app:srcCompat="@drawable/try_again_portrait"
                 app:visibleOrGone="@{viewModel.errorView}"
                 tools:visibility="visible" />
