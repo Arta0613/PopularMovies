@@ -1,7 +1,9 @@
 package com.example.popularmovies.ui;
 
-import com.example.popularmovies.domain.MovieItem;
+import androidx.annotation.NonNull;
+
+import com.example.popularmovies.domain.movies.MovieItem;
 
 public interface HomeItemClickListener {
-    void onItemClicked(final MovieItem movieItem);
+    void onItemClicked(@NonNull final MovieItem movieItem);
 }

@@ -13,3 +13,4 @@ Navigate to the `PopularMovies/app/build.gradle` file and add your `api_key` to 
  - Extract attributes that are duplicates into `styles/`
  - Make use of VectorDrawables instead of PNGs
  - Dagger?
+ - Make use of Repository pattern
