@@ -66,6 +66,14 @@ public class DetailViewModel extends ViewModel {
         return favoriteLiveData;
     }
 
+    public String getFirstVideoUrl() {
+        if (movieTrailerItems != null && movieTrailerItems.get(0) != null) {
+            return movieTrailerItems.get(0).getMovieTrailerUrl();
+        }
+
+        return "";
+    }
+
     public void updateFavoriteStatus(final boolean isFavorite) {
         if (isFavorite) {
             insertFavoriteMovie();
