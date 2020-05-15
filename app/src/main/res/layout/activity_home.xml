@@ -10,7 +10,6 @@
             type="com.example.popularmovies.ui.HomeViewModel" />
     </data>
 
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -38,5 +37,4 @@
             tools:visibility="visible" />
 
     </FrameLayout>
-
 </layout>

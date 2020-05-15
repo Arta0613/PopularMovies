@@ -1,4 +1,4 @@
-package com.example.popularmovies.data;
+package com.example.popularmovies.data.movies;
 
 import androidx.annotation.NonNull;
 
@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class MovieApi {
+public class MoviesApi {
 
     public int id;
 

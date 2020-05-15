@@ -1,4 +1,4 @@
-package com.example.popularmovies.domain;
+package com.example.popularmovies.domain.movies;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 
 public class Movie implements Parcelable {
 
+    private final String id;
     private final String name;
     private final String posterUrl;
     private final String backdropUrl;
@@ -14,7 +15,16 @@ public class Movie implements Parcelable {
     private final String synopsis;
     private final double userRating;
 
-    public Movie(final String name, final String posterUrl, final String backdropUrl, final String releaseDate, final String synopsis, final double userRating) {
+    public Movie(
+            @NonNull final String id,
+            @NonNull final String name,
+            @NonNull final String posterUrl,
+            @NonNull final String backdropUrl,
+            @NonNull final String releaseDate,
+            @NonNull final String synopsis,
+            final double userRating
+    ) {
+        this.id = id;
         this.name = name;
         this.posterUrl = posterUrl;
         this.backdropUrl = backdropUrl;
@@ -24,6 +34,7 @@ public class Movie implements Parcelable {
     }
 
     protected Movie(final Parcel source) {
+        this.id = source.readString();
         this.name = source.readString();
         this.posterUrl = source.readString();
         this.backdropUrl = source.readString();
@@ -32,22 +43,32 @@ public class Movie implements Parcelable {
         this.userRating = source.readDouble();
     }
 
+    @NonNull
+    public final String getId() {
+        return id;
+    }
+
+    @NonNull
     public final String getName() {
         return name;
     }
 
+    @NonNull
     public final String getPosterUrl() {
         return posterUrl;
     }
 
+    @NonNull
     public final String getBackdropUrl() {
         return backdropUrl;
     }
 
+    @NonNull
     public final String getReleaseDate() {
         return releaseDate;
     }
 
+    @NonNull
     public final String getSynopsis() {
         return synopsis;
     }
@@ -60,7 +81,8 @@ public class Movie implements Parcelable {
     @Override
     public final String toString() {
         return "Movie{" +
-                "name='" + name + '\'' +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
                 ", posterUrl='" + posterUrl + '\'' +
                 ", backdropUrl='" + backdropUrl + '\'' +
                 ", releaseDate='" + releaseDate + '\'' +
@@ -76,6 +98,7 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
+        dest.writeString(this.id);
         dest.writeString(this.name);
         dest.writeString(this.posterUrl);
         dest.writeString(this.backdropUrl);

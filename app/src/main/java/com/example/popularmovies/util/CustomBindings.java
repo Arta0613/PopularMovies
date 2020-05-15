@@ -17,12 +17,13 @@ public class CustomBindings {
             final Drawable drawable,
             final String imageUrl
     ) {
-        // TODO: potentially null check / handle this earlier
         Glide.with(imageView).load(imageUrl).error(drawable).into(imageView);
     }
 
     @BindingAdapter("setAdapter")
-    public static void bindRecyclerViewAdapter(final RecyclerView recyclerView, final RecyclerView.Adapter<?> adapter) {
+    public static void bindRecyclerViewAdapter(
+            final RecyclerView recyclerView, final RecyclerView.Adapter<?> adapter
+    ) {
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setAdapter(adapter);

@@ -1,4 +1,4 @@
-package com.example.popularmovies.ui;
+package com.example.popularmovies.ui.adapters;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.popularmovies.BR;
 import com.example.popularmovies.R;
-import com.example.popularmovies.domain.MovieItem;
+import com.example.popularmovies.domain.movies.MovieItem;
+import com.example.popularmovies.ui.HomeItemClickListener;
 
 import java.util.List;
 
