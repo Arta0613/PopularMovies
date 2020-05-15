@@ -70,6 +70,8 @@ public class DetailActivity extends AppCompatActivity implements ItemClickListen
             setFavorite(item, isFavorite);
             detailViewModel.updateFavoriteStatus(isFavorite);
             return true;
+        } else if (item.getItemId() == R.id.share) {
+            shareFirstVideo();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -80,6 +82,26 @@ public class DetailActivity extends AppCompatActivity implements ItemClickListen
         startActivity(intent);
     }
 
+    private void shareFirstVideo() {
+        final String shareUrl = detailViewModel.getFirstVideoUrl();
+
+        if (shareUrl.isEmpty()) {
+            Toast.makeText(this, R.string.no_videos_found, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        sendShareIntent(shareUrl);
+    }
+
+    private void sendShareIntent(final String shareUrl) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, shareUrl);
+        sendIntent.setType("text/plain");
+
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
+    }
 
     private void getMovieItemFromIntent() {
         try {
