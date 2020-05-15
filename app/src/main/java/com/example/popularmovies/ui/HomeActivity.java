@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,10 +13,15 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.popularmovies.R;
+import com.example.popularmovies.database.PopularMoviesDatabase;
 import com.example.popularmovies.databinding.ActivityHomeBinding;
 import com.example.popularmovies.domain.MovieSortOrder;
 import com.example.popularmovies.domain.movies.MovieItem;
 import com.example.popularmovies.util.UserPreferenceStorage;
+
+import java.util.ArrayList;
+
+import static com.example.popularmovies.util.NetworkState.isConnectedToNetwork;
 
 public class HomeActivity extends AppCompatActivity implements HomeItemClickListener {
 
@@ -40,14 +46,20 @@ public class HomeActivity extends AppCompatActivity implements HomeItemClickList
             isFavoritesSelected = savedInstanceState.getBoolean(IS_FAVORITES_SELECTED, false);
         }
 
+        setupViewModel();
+
         binding.setLifecycleOwner(this);
         binding.setViewModel(homeViewModel);
-        homeViewModel.setItemClickListener(this);
 
         if (!userPreferenceStorage.contains(MovieSortOrder.MOVIE_SORT_ORDER_KEY)) {
             setInitialSortOrder();
         }
-        loadMovies();
+
+        if (noNetwork() && homeViewModel.isCurrentMoviesLoaded()) {
+            homeViewModel.setCurrentLoadedMovies();
+        } else {
+            loadMovies();
+        }
     }
 
     @Override
@@ -73,13 +85,19 @@ public class HomeActivity extends AppCompatActivity implements HomeItemClickList
     @Override
     public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         if (item.getItemId() == R.id.sort_order) {
+            if (noNetwork()) {
+                Toast.makeText(this, R.string.check_connection, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
             changeSortOrderAndLoadMovies(item);
             return true;
         } else if (item.getItemId() == R.id.offline_favorite) {
             isFavoritesSelected = !item.isChecked();
-            invalidateOptionsMenu();
+            showOfflineFavorites();
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -88,6 +106,16 @@ public class HomeActivity extends AppCompatActivity implements HomeItemClickList
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(MovieItem.MOVIE_KEY, movieItem.getMovie());
         startActivity(intent);
+    }
+
+    private void setupViewModel() {
+        homeViewModel.setDatabase(PopularMoviesDatabase.getInstance(getApplicationContext()));
+        homeViewModel.getFavoriteMoviesLiveData().observe(this, favoriteMovies ->
+                homeViewModel.setFavoriteMovieMovieItems(
+                        favoriteMovies != null ? favoriteMovies : new ArrayList<>()
+                )
+        );
+        homeViewModel.setItemClickListener(this);
     }
 
     private void changeSortOrderAndLoadMovies(@NonNull final MenuItem item) {
@@ -132,5 +160,14 @@ public class HomeActivity extends AppCompatActivity implements HomeItemClickList
                 saveMoviesPreference(MovieSortOrder.POPULAR.name());
                 break;
         }
+    }
+
+    private void showOfflineFavorites() {
+        homeViewModel.setFavoritesEnabled(isFavoritesSelected);
+        invalidateOptionsMenu();
+    }
+
+    private boolean noNetwork() {
+        return !isConnectedToNetwork(this);
     }
 }
