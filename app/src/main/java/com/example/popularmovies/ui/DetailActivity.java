@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +45,23 @@ public class DetailActivity extends AppCompatActivity implements ItemClickListen
     }
 
     @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
+        if (item.getItemId() == R.id.favorite) {
+            final boolean isFavorite = !item.isChecked();
+
+            setFavorite(item, isFavorite);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void onItemClicked(@NonNull final String intentUrl) {
         final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(intentUrl));
         startActivity(intent);
@@ -72,5 +91,12 @@ public class DetailActivity extends AppCompatActivity implements ItemClickListen
         detailViewModel = new ViewModelProvider(this).get(DetailViewModel.class);
         detailViewModel.init(movieItem);
         detailViewModel.setItemClickListener(this);
+    }
+
+    private void setFavorite(@NonNull final MenuItem menuItem, final boolean isFavorite) {
+        menuItem.setChecked(isFavorite);
+        menuItem.setIcon(
+                isFavorite ? android.R.drawable.star_big_on : android.R.drawable.star_big_off
+        );
     }
 }
