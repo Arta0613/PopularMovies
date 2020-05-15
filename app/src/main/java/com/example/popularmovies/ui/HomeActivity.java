@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.popularmovies.R;
 import com.example.popularmovies.databinding.ActivityHomeBinding;
-import com.example.popularmovies.domain.MovieItem;
+import com.example.popularmovies.domain.movies.MovieItem;
 import com.example.popularmovies.domain.MovieSortOrder;
 import com.example.popularmovies.util.UserPreferenceStorage;
 
